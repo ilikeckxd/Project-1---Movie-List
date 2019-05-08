@@ -1,0 +1,82 @@
+movies = []
+
+
+def menu():
+    user_input = input("Enter 'a' to add a movie, 'l' to see your movies, "
+                       "\n'f' to find a movie, and 'q' to quit:  ")
+
+    while user_input != 'q':
+        if user_input == 'a':
+            add_movie()
+        elif user_input == 'l':
+            show_movies(movies)
+        elif user_input == 'f':
+            find_movie()
+        else:
+            print('Unknown command. Try again.')
+        user_input = input("\nEnter 'a' to add a movie, 'l' to see your movies, \n'f' to find a movie, and 'q' to quit:  ")
+
+    print('The program has ended.')
+
+
+def add_movie():
+    name = input("Enter the name of the movie: ")
+    director = input("Enter the name of the director: ")
+    year = int(input("Enter the name of the year: "))
+    movies.append({
+        "name": name,
+        "director": director,
+        "year": year
+    })
+    print("\nThe movie you just entered is: \n"
+          f"Name: {movies[-1]['name']}\n"
+          f"Director: {movies[-1]['director']}\n"
+          f"Year: {movies[-1]['year']}")
+
+
+def show_movies(any_movie_list):
+    if any_movie_list == []:
+        print("Nothing is found.")
+    else:
+        for movie in any_movie_list:
+            show_movie_details(movie)
+
+
+def show_movie_details(movie):
+    print(f"\nName: {movie['name']}")
+    print(f"Director: {movie['director']}")
+    print(f"Year: {movie['year']}")
+
+
+def find_movie():
+    how = input("\nHow do you want to search the movie?"
+                 "\na) Name, b) Director, c) Year: ")
+    how_dic = {
+        'a': 'name',
+        'b': 'director',
+        'c': 'year'
+    }
+    if how == 'c':
+        what = int(input(f"\nWhat is the year of the movie? "))
+    else:
+        what = input(f"\nWhat is the {how_dic[how]} of the movie? ")
+    #區分輸入str或int
+
+    found_movies = find_movie_in_the_list(movies, what, lambda x: x[how_dic[how]])
+
+    show_movies(found_movies)
+
+
+def find_movie_in_the_list(items, what, finder):    #(how, what)=>(what, finder)
+    found = []
+
+    for i in items:
+        if finder(i) == what:  #movie[how_dic[how]]=>finder(movie)
+            found.append(i)
+            #如果不在名單怎麼辦? 把所有name弄成一個List然後搜尋? 是的
+            #如果在名單怎麼停止搜尋? =>break。但因為有可能有重複的所以繼續搜尋
+
+        return found
+
+
+menu()
